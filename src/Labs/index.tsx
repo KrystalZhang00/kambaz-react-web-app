@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { Routes, Route, Navigate} from "react-router-dom";
 import TOC from "./TOC";
 import Lab1 from "./Lab1";
 import Lab2 from "./Lab2";
