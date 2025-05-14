@@ -7,8 +7,8 @@ export default function App() {
     <HashRouter>
       <div>
         <Routes>
-          {/* 设置默认路径重定向 */}
-          <Route path="/" element={<Navigate to="/Kambaz" />} />
+          
+          <Route path="/" element={<Navigate to="/Labs/Lab1" />} />
           <Route path="/Labs/*" element={<Labs />} />
           <Route path="/Kambaz/*" element={<Kambaz />} />
           
