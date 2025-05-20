@@ -1,4 +1,17 @@
 import "./index.css";
+import BackgroundColors from "./BackgroundColors";
+import Borders from "./Borders";
+import Padding from "./Padding";
+import Margins from "./Margins";
+import Corners from "./Corners";
+import Dimensions from "./Dimensions";
+import Positions from "./Positions";
+import Zindex from "./Zindex";
+
+
+
+
+
 export default function Lab2() {
   return (
     <div id="wd-lab2">
@@ -52,7 +65,26 @@ This heading has same style as paragraph above
           </p>
         </div>
       </div>
-    </div>
+      </div>
+      <div id="wd-css-colors">
+      <h2>Colors</h2>
+      <h3 className="wd-fg-color-blue">Foreground color</h3>
+      <p className="wd-fg-color-red">
+        The text in this paragraph is red but
+        <span className="wd-fg-color-green">this text is green</span>
+      </p>
+      </div>
+      <BackgroundColors />
+      <Borders />
+      <Padding />
+      <Margins />
+      <Corners />
+      <Dimensions />
+      <Positions />
+      <Zindex />
+
+
+
 
 
     </div>);}
