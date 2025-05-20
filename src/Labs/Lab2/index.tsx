@@ -7,6 +7,11 @@ import Corners from "./Corners";
 import Dimensions from "./Dimensions";
 import Positions from "./Positions";
 import Zindex from "./Zindex";
+import Float from "./Float";
+import GridLayout from "./GridLayout";
+import Flex from "./Flex";
+import ReactIconsSampler from "./ReactIcons";
+
 
 
 
@@ -82,6 +87,14 @@ This heading has same style as paragraph above
       <Dimensions />
       <Positions />
       <Zindex />
+      <Float />
+      <GridLayout />
+      <Flex />
+      <ReactIconsSampler />
+
+
+      
+      
 
 
 
