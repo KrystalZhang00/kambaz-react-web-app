@@ -18,6 +18,8 @@ import ScreenSizeLabel from "./ScreenSizeLabel";
 import BootstrapTables from "./BootstrapTables";
 import BootstrapLists from "./BootstrapLists";
 import BootstrapForms from "./BootstrapForms";
+import BootstrapNavigation from "./BootstrapNavigation";
+
 
 
 
@@ -107,6 +109,7 @@ This heading has same style as paragraph above
       <BootstrapTables />
       <BootstrapLists />
       <BootstrapForms />
+      <BootstrapNavigation />
 
 
     </Container>

@@ -1,101 +1,120 @@
+import { Form, Button, Row, Col } from "react-bootstrap";
+
 export default function AssignmentEditor() {
-    return (
-      <div id="wd-assignments-editor">
-        <label htmlFor="wd-name">Assignment Name</label>
-        <input id="wd-name" value="A1 - ENV + HTML" /><br /><br />
-  
-        <textarea id="wd-description">
-          The assignment is available online. Submit a link to the landing page of your Web application running on Netlify.
-        </textarea><br /><br />
-  
-        <table>
-          <tbody>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-points">Points</label>
-              </td>
-              <td>
-                <input id="wd-points" value={100} />
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-group">Assignment Group</label>
-              </td>
-              <td>
-                <select id="wd-group">
-                  <option>ASSIGNMENTS</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-display-grade-as">Display Grade as</label>
-              </td>
-              <td>
-                <select id="wd-display-grade-as">
-                  <option>Percentage</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-submission-type">Submission Type</label>
-              </td>
-              <td>
-                <select id="wd-submission-type">
-                  <option>Online</option>
-                </select>
-                <br />
-                <input id="wd-text-entry" type="checkbox" />
-                <label htmlFor="wd-text-entry">Text Entry</label><br />
-                <input id="wd-website-url" type="checkbox" />
-                <label htmlFor="wd-website-url">Website URL</label><br />
-                <input id="wd-media-recordings" type="checkbox" />
-                <label htmlFor="wd-media-recordings">Media Recordings</label><br />
-                <input id="wd-student-annotation" type="checkbox" />
-                <label htmlFor="wd-student-annotation">Student Annotation</label><br />
-                <input id="wd-file-upload" type="checkbox" />
-                <label htmlFor="wd-file-upload">File Upload</label>
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-assign-to">Assign to</label>
-              </td>
-              <td>
-                <input id="wd-assign-to" value="Everyone" />
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-due-date">Due</label>
-              </td>
-              <td>
-                <input id="wd-due-date" type="date" value="2024-05-13" />
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-available-from">Available from</label>
-              </td>
-              <td>
-                <input id="wd-available-from" type="date" value="2024-05-06" />
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <label htmlFor="wd-available-until">Until</label>
-              </td>
-              <td>
-                <input id="wd-available-until" type="date" value="2024-05-20" />
-              </td>
-            </tr>
-          </tbody>
-        </table><br />
-        <button>Cancel</button>
-        <button>Save</button>
+  return (
+    <Form id="wd-assignments-editor" className="m-3">
+      {/* Assignment Name */}
+      <Form.Group className="mb-3" controlId="wd-name">
+        <Form.Label className="fw-bold">Assignment Name</Form.Label>
+        <Form.Control type="text" defaultValue="A1 - ENV + HTML" />
+      </Form.Group>
+
+      {/* Description */}
+      <Form.Group className="mb-3" controlId="wd-description">
+        <Form.Control
+          as="textarea"
+          rows={6}
+          defaultValue={`The assignment is available online. Submit a link to the landing page of your Web application running on Netlify.
+
+The landing page should include the following:
+• Your full name and section
+• Links to each of the lab assignments
+• Link to the Kambaz application
+• Links to all relevant source code repositories
+
+The Kambaz application should include a link to navigate back to the landing page.`}
+        />
+      </Form.Group>
+
+      {/* Points */}
+      <Form.Group className="mb-3" controlId="wd-points">
+        <Form.Label className="fw-bold">Points</Form.Label>
+        <Form.Control type="number" defaultValue={100} />
+      </Form.Group>
+
+      {/* Assignment Group */}
+      <Form.Group as={Row} className="mb-3" controlId="wd-group">
+        <Form.Label column sm={3}>
+          Assignment Group
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Select>
+            <option>ASSIGNMENTS</option>
+          </Form.Select>
+        </Col>
+      </Form.Group>
+
+      {/* Display Grade */}
+      <Form.Group as={Row} className="mb-3" controlId="wd-display-grade-as">
+        <Form.Label column sm={3}>
+          Display Grade as
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Select>
+            <option>Percentage</option>
+          </Form.Select>
+        </Col>
+      </Form.Group>
+
+      {/* Submission Type */}
+      <Form.Group as={Row} className="mb-3" controlId="wd-submission-type">
+        <Form.Label column sm={3}>
+          Submission Type
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Select className="mb-2">
+            <option>Online</option>
+          </Form.Select>
+          {/* Checkbox group */}
+          <Form.Check type="checkbox" label="Text Entry" id="wd-text-entry" />
+          <Form.Check type="checkbox" label="Website URL" id="wd-website-url" />
+          <Form.Check type="checkbox" label="Media Recordings" id="wd-media-recordings" />
+          <Form.Check type="checkbox" label="Student Annotation" id="wd-student-annotation" />
+          <Form.Check type="checkbox" label="File Upload" id="wd-file-upload" />
+        </Col>
+      </Form.Group>
+
+      {/* Assign To */}
+      <Form.Group as={Row} className="mb-3" controlId="wd-assign-to">
+        <Form.Label column sm={3}>
+          Assign to
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control type="text" defaultValue="Everyone" />
+        </Col>
+      </Form.Group>
+
+      {/* Due, Available From, Until */}
+      <Form.Group as={Row} className="mb-3" controlId="wd-due-date">
+        <Form.Label column sm={3}>
+          Due
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control type="date" defaultValue="2024-05-13" />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="wd-available-from">
+        <Form.Label column sm={3}>
+          Available from
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control type="date" defaultValue="2024-05-06" />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-4" controlId="wd-available-until">
+        <Form.Label column sm={3}>
+          Until
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control type="date" defaultValue="2024-05-20" />
+        </Col>
+      </Form.Group>
+
+      {/* Buttons */}
+      <div className="d-flex justify-content-end gap-2">
+        <Button variant="secondary">Cancel</Button>
+        <Button variant="danger">Save</Button>
       </div>
-    );
-  }
-  
+    </Form>
+  );
+}
