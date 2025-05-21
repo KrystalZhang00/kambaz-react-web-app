@@ -1,14 +1,35 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
+
 export default function Signin() {
+  const navigate = useNavigate();
+
+  const handleSignin = () => {
+    
+    navigate("/Kambaz/Dashboard");
+  };
+
   return (
-    <div id="wd-signin-screen">
-      <h3>Sign in</h3>
-      <input placeholder="username" className="wd-username" /> <br />
-      <input placeholder="password" type="password" className="wd-password" /> <br />
-      <Link id="wd-signin-btn" to="/Kambaz/Dashboard">
-        Sign in
-      </Link>
-      <br />
-      <Link  to="/Kambaz/Account/Signup"  id="wd-signup-link">Sign up</Link>
+    <div id="wd-signin-screen" className="p-3">
+      <h3 className="mb-3">Signin</h3>
+      <Form style={{ maxWidth: "300px" }}>
+        <Form.Control
+          type="text"
+          placeholder="username"
+          className="mb-2"
+        />
+        <Form.Control
+          type="password"
+          placeholder="password"
+          className="mb-2"
+        />
+        <Button variant="primary" className="w-100 mb-2" onClick={handleSignin}>
+          Signin
+        </Button>
+        <Link to="/Kambaz/Account/Signup" className="text-primary">
+          Signup
+        </Link>
+      </Form>
     </div>
-);}
+  );
+}

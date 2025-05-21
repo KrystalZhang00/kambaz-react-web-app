@@ -2,6 +2,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 export default function AssignmentEditor() {
   return (
+    
     <Form id="wd-assignments-editor" className="m-3">
       {/* Assignment Name */}
       <Form.Group className="mb-3" controlId="wd-name">

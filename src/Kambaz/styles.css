@@ -54,4 +54,10 @@ body {
     border-color: gray !important;
   }
   
+  #wd-account-navigation .list-group-item.active {
+    background-color: transparent;
+    border-left: 3px solid black;
+    font-weight: bold;
+    color: black !important;
+  }
   
