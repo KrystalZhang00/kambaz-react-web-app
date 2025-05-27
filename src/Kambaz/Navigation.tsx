@@ -1,13 +1,21 @@
 import { ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaRegCircleUser, FaInbox } from "react-icons/fa6";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { IoCalendarOutline } from "react-icons/io5";
-import { LiaBookSolid } from "react-icons/lia";
-import { LiaFlaskSolid } from "react-icons/lia";
-
+import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
 
 export default function KambazNavigation() {
+  const { pathname } = useLocation();
+
+  const links = [
+    { label: "Dashboard", path: "/Kambaz/Dashboard", icon: AiOutlineDashboard },
+    { label: "Courses",   path: "/Kambaz/Dashboard", icon: LiaBookSolid },
+    { label: "Calendar",  path: "/Kambaz/Calendar",  icon: IoCalendarOutline },
+    { label: "Inbox",     path: "/Kambaz/Inbox",     icon: FaInbox },
+    { label: "Labs",      path: "/Labs",             icon: LiaCogSolid },
+  ];
+
   return (
     <ListGroup
       id="wd-kambaz-navigation"
@@ -29,67 +37,37 @@ export default function KambazNavigation() {
       <ListGroup.Item
         as={Link}
         to="/Kambaz/Account"
-        className="text-center border-0 bg-black text-white"
+        className={`text-center border-0 ${
+          pathname.includes("/Kambaz/Account") ? "bg-white text-danger" : "bg-black text-white"
+        }`}
       >
-        <FaRegCircleUser className="fs-1 text-white" />
+        <FaRegCircleUser
+          className={`fs-1 ${
+            pathname.includes("/Kambaz/Account") ? "text-danger" : "text-white"
+          }`}
+        />
         <br />
         Account
       </ListGroup.Item>
 
-      {/* Dashboard - red on white */}
-      <ListGroup.Item
-        as={Link}
-        to="/Kambaz/Dashboard"
-        className="text-center border-0 bg-white text-danger"
-      >
-        <AiOutlineDashboard className="fs-1 text-danger" />
-        <br />
-        Dashboard
-      </ListGroup.Item>
-
-      {/* Courses - red icon, white text, black background */}
-      <ListGroup.Item
-        as={Link}
-        to="/Kambaz/Dashboard"
-        className="text-center border-0 bg-black text-white"
-      >
-        <LiaBookSolid className="fs-1 text-danger" />
-        <br />
-        Courses
-      </ListGroup.Item>
-
-      {/* Calendar */}
-      <ListGroup.Item
-        as={Link}
-        to="/Kambaz/Calendar"
-        className="text-center border-0 bg-black text-white"
-      >
-        <IoCalendarOutline className="fs-1 text-danger" />
-        <br />
-        Calendar
-      </ListGroup.Item>
-
-      {/* Inbox */}
-      <ListGroup.Item
-        as={Link}
-        to="/Kambaz/Inbox"
-        className="text-center border-0 bg-black text-white"
-      >
-        <FaInbox className="fs-1 text-danger" />
-        <br />
-        Inbox
-      </ListGroup.Item>
-
-      {/* Labs */}
-      <ListGroup.Item
-        as={Link}
-        to="/Labs"
-        className="text-center border-0 bg-black text-white"
-      >
-        <LiaFlaskSolid className="fs-1 text-danger" />
-        <br />
-        Labs
-      </ListGroup.Item>
+      {/* Data-driven navigation items */}
+      {links.map(({ label, path, icon: Icon }) => {
+        const isActive = pathname.startsWith(path);
+        return (
+          <ListGroup.Item
+            key={label}
+            as={Link}
+            to={path}
+            className={`text-center border-0 ${
+              isActive ? "bg-white text-danger" : "bg-black text-white"
+            }`}
+          >
+            <Icon className="fs-1 text-danger" />
+            <br />
+            {label}
+          </ListGroup.Item>
+        );
+      })}
     </ListGroup>
   );
 }
