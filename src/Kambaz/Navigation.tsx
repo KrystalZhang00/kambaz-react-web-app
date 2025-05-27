@@ -17,57 +17,25 @@ export default function KambazNavigation() {
   ];
 
   return (
-    <ListGroup
-      id="wd-kambaz-navigation"
-      style={{ width: 120 }}
-      className="rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black z-2"
-    >
-      {/* Northeastern logo */}
-      <ListGroup.Item
-        id="wd-neu-link"
-        target="_blank"
-        action
-        href="https://www.northeastern.edu/"
-        className="bg-black border-0 text-center"
-      >
-        <img src="/images/NEU.png" width="75px" alt="Northeastern" />
-      </ListGroup.Item>
-
-      {/* Account - white icon + text */}
-      <ListGroup.Item
-        as={Link}
-        to="/Kambaz/Account"
-        className={`text-center border-0 ${
-          pathname.includes("/Kambaz/Account") ? "bg-white text-danger" : "bg-black text-white"
-        }`}
-      >
-        <FaRegCircleUser
-          className={`fs-1 ${
-            pathname.includes("/Kambaz/Account") ? "text-danger" : "text-white"
-          }`}
-        />
+    <ListGroup id="wd-kambaz-navigation" style={{width: 120}}
+         className="rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black z-2">
+      <ListGroup.Item id="wd-neu-link" target="_blank" href="https://www.northeastern.edu/"
+        action className="bg-black border-0 text-center">
+        <img src="/images/NEU.png" width="75px" /></ListGroup.Item>
+      <ListGroup.Item as={Link} to="/Kambaz/Account" className={`text-center border-0 bg-black
+            ${pathname.includes("Account") ? "bg-white text-danger" : "bg-black text-white"}`}>
+        <FaRegCircleUser className={`fs-1 ${pathname.includes("Account") ? "text-danger" : "text-white"}`} />
         <br />
         Account
       </ListGroup.Item>
-
-      {/* Data-driven navigation items */}
-      {links.map(({ label, path, icon: Icon }) => {
-        const isActive = pathname.startsWith(path);
-        return (
-          <ListGroup.Item
-            key={label}
-            as={Link}
-            to={path}
-            className={`text-center border-0 ${
-              isActive ? "bg-white text-danger" : "bg-black text-white"
-            }`}
-          >
-            <Icon className="fs-1 text-danger" />
-            <br />
-            {label}
-          </ListGroup.Item>
-        );
-      })}
+      {links.map((link) => (
+        <ListGroup.Item key={link.path} as={Link} to={link.path} className={`bg-black text-center border-0
+              ${pathname.includes(link.label) ? "text-danger bg-white" : "text-white bg-black"}`}>
+          {link.icon({ className: "fs-1 text-danger"})}
+          <br />
+          {link.label}
+        </ListGroup.Item>
+      ))}
     </ListGroup>
-  );
-}
+);}
+
