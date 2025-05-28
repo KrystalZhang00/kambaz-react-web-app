@@ -2,9 +2,13 @@ import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
 import { FaSearch, FaCheckCircle } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { BsGripVertical } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import * as db from "../../Database";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments.filter((a) => a.course === cid);
+
   return (
     <div id="wd-assignments" className="pe-3">
       {/* Search + Buttons */}
@@ -32,55 +36,24 @@ export default function Assignments() {
 
       {/* Assignment List */}
       <ListGroup variant="flush">
-
-        <ListGroup.Item
-          as={Link}
-          to="/Kambaz/Courses/1234/Assignments/123"
-          className="border-start border-4 border-success mb-2 text-decoration-none text-dark"
-        >
-          <div className="d-flex justify-content-between">
-            <div>
-              <div className="fw-bold text-primary">A1 - ENV + HTML</div>
-              <div className="text-muted small">
-                Multiple Modules | <strong>Not available until</strong> May 6 at 12:00am | <strong>Due</strong> May 13 at 11:59pm | 100 pts
+        {assignments.map((a) => (
+          <ListGroup.Item
+            key={a._id}
+            as={Link}
+            to={`/Kambaz/Courses/${cid}/Assignments/${a._id}`}
+            className="border-start border-4 border-success mb-2 text-decoration-none text-dark"
+          >
+            <div className="d-flex justify-content-between">
+              <div>
+                <div className="fw-bold text-primary">{a.title}</div>
+                <div className="text-muted small">
+                  Multiple Modules | <strong>Not available until</strong> May 6 at 12:00am | <strong>Due</strong> May 13 at 11:59pm | 100 pts
+                </div>
               </div>
+              <div className="text-success"><FaCheckCircle /></div>
             </div>
-            <div className="text-success"><FaCheckCircle /></div>
-          </div>
-        </ListGroup.Item>
-
-        <ListGroup.Item
-          as={Link}
-          to="/Kambaz/Courses/1234/Assignments/124"
-          className="border-start border-4 border-success mb-2 text-decoration-none text-dark"
-        >
-          <div className="d-flex justify-content-between">
-            <div>
-              <div className="fw-bold text-primary">A2 - CSS + BOOTSTRAP</div>
-              <div className="text-muted small">
-                Multiple Modules | <strong>Not available until</strong> May 13 at 12:00am | <strong>Due</strong> May 20 at 11:59pm | 100 pts
-              </div>
-            </div>
-            <div className="text-success"><FaCheckCircle /></div>
-          </div>
-        </ListGroup.Item>
-
-        <ListGroup.Item
-          as={Link}
-          to="/Kambaz/Courses/1234/Assignments/125"
-          className="border-start border-4 border-success mb-2 text-decoration-none text-dark"
-        >
-          <div className="d-flex justify-content-between">
-            <div>
-              <div className="fw-bold text-primary">A3 - JAVASCRIPT + REACT</div>
-              <div className="text-muted small">
-                Multiple Modules | <strong>Not available until</strong> May 20 at 12:00am | <strong>Due</strong> May 27 at 11:59pm | 100 pts
-              </div>
-            </div>
-            <div className="text-success"><FaCheckCircle /></div>
-          </div>
-        </ListGroup.Item>
-
+          </ListGroup.Item>
+        ))}
       </ListGroup>
     </div>
   );
