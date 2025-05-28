@@ -4,7 +4,8 @@ import * as db from "../../Database";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignment = db.assignments.find(a => a._id === aid);
+  const assignment = db.assignments.find(a => a._id === aid) as any;
+  
 
   return (
     <Form id="wd-assignments-editor" className="m-3">
@@ -94,8 +95,8 @@ export default function AssignmentEditor() {
 
       {/* Buttons */}
       <div className="d-flex justify-content-end gap-2">
-        <Button as={Link} to={`/Kambaz/Courses/${cid}/Assignments`} variant="secondary">Cancel</Button>
-        <Button as={Link} to={`/Kambaz/Courses/${cid}/Assignments`} variant="danger">Save</Button>
+        <Button as={Link as any} to={`/Kambaz/Courses/${cid}/Assignments`} variant="secondary">Cancel</Button>
+        <Button as={Link as any} to={`/Kambaz/Courses/${cid}/Assignments`} variant="danger">Save</Button>
       </div>
     </Form>
   );

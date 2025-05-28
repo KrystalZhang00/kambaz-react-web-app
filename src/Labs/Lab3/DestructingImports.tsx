@@ -1,4 +1,4 @@
-import React from "react";
+
 import Math, { add, subtract, multiply, divide } from "./Math"; // Default and named imports
 import * as Matematica from "./Math"; // Namespace import
 
