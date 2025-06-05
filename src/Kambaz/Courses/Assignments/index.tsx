@@ -1,13 +1,42 @@
-import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
-import { FaSearch, FaCheckCircle } from "react-icons/fa";
+import { Button, Form, InputGroup, ListGroup, Modal } from "react-bootstrap";
+import { FaSearch, FaCheckCircle, FaTrash } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { BsGripVertical } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
-import * as db from "../../Database";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteAssignment } from "./reducer";
+import { useState } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments.filter((a) => a.course === cid);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const dispatch = useDispatch();
+  const isFaculty = currentUser?.role === "FACULTY";
+  
+  // State for delete confirmation modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
+  
+  const courseAssignments = assignments.filter((a: any) => a.course === cid);
+
+  const handleDeleteClick = (assignment: any) => {
+    setAssignmentToDelete(assignment);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (assignmentToDelete) {
+      dispatch(deleteAssignment(assignmentToDelete._id));
+    }
+    setShowDeleteModal(false);
+    setAssignmentToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setAssignmentToDelete(null);
+  };
 
   return (
     <div id="wd-assignments" className="pe-3">
@@ -15,46 +44,81 @@ export default function Assignments() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <InputGroup className="w-50">
           <InputGroup.Text><FaSearch /></InputGroup.Text>
-          <Form.Control placeholder="Search for Assignments" />
+          <Form.Control placeholder="Search for Assignments" id="wd-search-assignment" />
         </InputGroup>
 
-        <div>
-          <Button variant="secondary" className="me-2">
-            <FaPlus className="me-1" /> Group
-          </Button>
-          <Button variant="danger">
-            <FaPlus className="me-1" /> Assignment
-          </Button>
-        </div>
+        {isFaculty && (
+          <div>
+            <Button variant="secondary" className="me-2" id="wd-add-assignment-group">
+              <FaPlus className="me-1" /> Group
+            </Button>
+            <Link to={`/Kambaz/Courses/${cid}/Assignments/new`}>
+              <Button variant="danger" id="wd-add-assignment">
+                <FaPlus className="me-1" /> Assignment
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Title bar */}
-      <h5 className="fw-bold d-flex align-items-center">
+      <h5 className="fw-bold d-flex align-items-center" id="wd-assignments-title">
         <BsGripVertical className="me-2 fs-5" />
-        ASSIGNMENTS <span className="ms-2 fw-normal text-muted">(40% of Total)</span>
+        ASSIGNMENTS <span className="ms-2 fw-normal text-muted">40% of Total</span>
+        {isFaculty && <Button variant="link" className="ms-2 p-0">+</Button>}
       </h5>
 
       {/* Assignment List */}
-      <ListGroup variant="flush">
-        {assignments.map((a) => (
+      <ListGroup variant="flush" id="wd-assignment-list">
+        {courseAssignments.map((a: any) => (
           <ListGroup.Item
             key={a._id}
-            as={Link}
-            to={`/Kambaz/Courses/${cid}/Assignments/${a._id}`}
-            className="border-start border-4 border-success mb-2 text-decoration-none text-dark"
+            className="wd-assignment-list-item border-start border-4 border-success mb-2 p-0"
           >
-            <div className="d-flex justify-content-between">
-              <div>
-                <div className="fw-bold text-primary">{a.title}</div>
+            <div className="d-flex justify-content-between align-items-center p-3">
+              <Link
+                to={`/Kambaz/Courses/${cid}/Assignments/${a._id}`}
+                className="wd-assignment-link text-decoration-none text-dark flex-grow-1"
+              >
+                <div className="fw-bold">{a.title}</div>
                 <div className="text-muted small">
-                  Multiple Modules | <strong>Not available until</strong> May 6 at 12:00am | <strong>Due</strong> May 13 at 11:59pm | 100 pts
+                  Multiple Modules | Due {a.dueDate || "May 13 at 11:59pm"} | {a.points || 100} pts
                 </div>
+              </Link>
+              <div className="d-flex align-items-center">
+                {isFaculty && (
+                  <Button
+                    variant="link"
+                    className="text-danger p-1"
+                    onClick={() => handleDeleteClick(a)}
+                  >
+                    <FaTrash />
+                  </Button>
+                )}
+                <FaCheckCircle className="text-success ms-2" />
               </div>
-              <div className="text-success"><FaCheckCircle /></div>
             </div>
           </ListGroup.Item>
         ))}
       </ListGroup>
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onHide={handleCancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Assignment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to remove "{assignmentToDelete?.title}"?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

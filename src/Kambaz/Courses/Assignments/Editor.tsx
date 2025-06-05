@@ -1,102 +1,169 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom";
-import * as db from "../../Database";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addAssignment, updateAssignment } from "./reducer";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignment = db.assignments.find(a => a._id === aid) as any;
-  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+
+  const isNew = aid === "new";
+  const assignment = assignments.find((a: any) => a._id === aid);
+
+  const [formData, setFormData] = useState({
+    title: "New Assignment",
+    description: "New Assignment Description",
+    points: 100,
+    dueDate: "2024-05-13",
+    availableFrom: "2024-05-06",
+    availableUntil: "",
+  });
+
+  useEffect(() => {
+    if (!isNew && assignment) {
+      setFormData({
+        title: assignment.title || "New Assignment",
+        description: assignment.description || "New Assignment Description",
+        points: assignment.points || 100,
+        dueDate: assignment.dueDate || "2024-05-13",
+        availableFrom: assignment.availableFrom || "2024-05-06",
+        availableUntil: assignment.availableUntil || "",
+      });
+    }
+  }, [assignment, isNew]);
+
+  const handleSave = () => {
+    if (isNew) {
+      dispatch(addAssignment({ ...formData, course: cid }));
+    } else {
+      dispatch(updateAssignment({ _id: aid, ...formData, course: cid }));
+    }
+    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  };
 
   return (
     <Form id="wd-assignments-editor" className="m-3">
-      {/* Assignment Name */}
       <Form.Group className="mb-3" controlId="wd-name">
         <Form.Label className="fw-bold">Assignment Name</Form.Label>
-        <Form.Control type="text" defaultValue={assignment?.title || ""} />
+        <Form.Control
+          type="text"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          readOnly={!isFaculty}
+        />
       </Form.Group>
 
-      {/* Description */}
       <Form.Group className="mb-3" controlId="wd-description">
         <Form.Control
           as="textarea"
           rows={6}
-          defaultValue={assignment?.description || "The assignment is available online. Submit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n• Your full name and section\n• Links to each of the lab assignments\n• Link to the Kambaz application\n• Links to all relevant source code repositories\n\nThe Kambaz application should include a link to navigate back to the landing page."}
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          readOnly={!isFaculty}
+          placeholder="The assignment is available online. Submit a link to the landing page of your Web application running on Netlify."
         />
       </Form.Group>
 
-      {/* Points */}
       <Form.Group className="mb-3" controlId="wd-points">
         <Form.Label className="fw-bold">Points</Form.Label>
-        <Form.Control type="number" defaultValue={assignment?.points || 100} />
+        <Form.Control
+          type="number"
+          value={formData.points}
+          onChange={(e) => setFormData({ ...formData, points: parseInt(e.target.value) || 0 })}
+          readOnly={!isFaculty}
+        />
       </Form.Group>
 
-      {/* Assignment Group */}
+      {/* Keep all the other form fields as you had them */}
       <Form.Group as={Row} className="mb-3" controlId="wd-group">
         <Form.Label column sm={3}>Assignment Group</Form.Label>
         <Col sm={9}>
-          <Form.Select>
+          <Form.Select disabled={!isFaculty}>
             <option>ASSIGNMENTS</option>
           </Form.Select>
         </Col>
       </Form.Group>
 
-      {/* Display Grade */}
       <Form.Group as={Row} className="mb-3" controlId="wd-display-grade-as">
         <Form.Label column sm={3}>Display Grade as</Form.Label>
         <Col sm={9}>
-          <Form.Select>
+          <Form.Select disabled={!isFaculty}>
             <option>Percentage</option>
           </Form.Select>
         </Col>
       </Form.Group>
 
-      {/* Submission Type */}
       <Form.Group as={Row} className="mb-3" controlId="wd-submission-type">
         <Form.Label column sm={3}>Submission Type</Form.Label>
         <Col sm={9}>
-          <Form.Select className="mb-2">
+          <Form.Select className="mb-2" disabled={!isFaculty}>
             <option>Online</option>
           </Form.Select>
-          <Form.Check type="checkbox" label="Text Entry" id="wd-text-entry" />
-          <Form.Check type="checkbox" label="Website URL" id="wd-website-url" />
-          <Form.Check type="checkbox" label="Media Recordings" id="wd-media-recordings" />
-          <Form.Check type="checkbox" label="Student Annotation" id="wd-student-annotation" />
-          <Form.Check type="checkbox" label="File Upload" id="wd-file-upload" />
+          <Form.Check type="checkbox" label="Text Entry" id="wd-text-entry" disabled={!isFaculty} />
+          <Form.Check type="checkbox" label="Website URL" id="wd-website-url" disabled={!isFaculty} />
+          <Form.Check type="checkbox" label="Media Recordings" id="wd-media-recordings" disabled={!isFaculty} />
+          <Form.Check type="checkbox" label="Student Annotation" id="wd-student-annotation" disabled={!isFaculty} />
+          <Form.Check type="checkbox" label="File Upload" id="wd-file-upload" disabled={!isFaculty} />
         </Col>
       </Form.Group>
 
-      {/* Assign To */}
       <Form.Group as={Row} className="mb-3" controlId="wd-assign-to">
         <Form.Label column sm={3}>Assign to</Form.Label>
         <Col sm={9}>
-          <Form.Control type="text" defaultValue="Everyone" />
+          <Form.Control type="text" value="Everyone" readOnly={!isFaculty} />
         </Col>
       </Form.Group>
 
-      {/* Due, Available From, Until */}
       <Form.Group as={Row} className="mb-3" controlId="wd-due-date">
         <Form.Label column sm={3}>Due</Form.Label>
         <Col sm={9}>
-          <Form.Control type="date" defaultValue="2024-05-13" />
-        </Col>
-      </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlId="wd-available-from">
-        <Form.Label column sm={3}>Available from</Form.Label>
-        <Col sm={9}>
-          <Form.Control type="date" defaultValue="2024-05-06" />
-        </Col>
-      </Form.Group>
-      <Form.Group as={Row} className="mb-4" controlId="wd-available-until">
-        <Form.Label column sm={3}>Until</Form.Label>
-        <Col sm={9}>
-          <Form.Control type="date" />
+          <Form.Control
+            type="date"
+            value={formData.dueDate}
+            onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+            readOnly={!isFaculty}
+          />
         </Col>
       </Form.Group>
 
-      {/* Buttons */}
+      <Form.Group as={Row} className="mb-3" controlId="wd-available-from">
+        <Form.Label column sm={3}>Available from</Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            type="date"
+            value={formData.availableFrom}
+            onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
+            readOnly={!isFaculty}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} className="mb-4" controlId="wd-available-until">
+        <Form.Label column sm={3}>Until</Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            type="date"
+            value={formData.availableUntil}
+            onChange={(e) => setFormData({ ...formData, availableUntil: e.target.value })}
+            readOnly={!isFaculty}
+          />
+        </Col>
+      </Form.Group>
+
       <div className="d-flex justify-content-end gap-2">
-        <Button as={Link as any} to={`/Kambaz/Courses/${cid}/Assignments`} variant="secondary">Cancel</Button>
-        <Button as={Link as any} to={`/Kambaz/Courses/${cid}/Assignments`} variant="danger">Save</Button>
+        <Button as={Link as any} to={`/Kambaz/Courses/${cid}/Assignments`} variant="secondary">
+          Cancel
+        </Button>
+        {isFaculty && (
+          <Button onClick={handleSave} variant="danger">
+            Save
+          </Button>
+        )}
       </div>
     </Form>
   );

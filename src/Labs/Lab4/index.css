@@ -1,0 +1,81 @@
+/* Container */
+#wd-array-state-variables {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 300px;
+  margin: 2rem 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Heading */
+#wd-array-state-variables h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Add Button */
+.add-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+
+/* List */
+.custom-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  background-color: white;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* Item Text */
+.item-value {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Delete Button */
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+
