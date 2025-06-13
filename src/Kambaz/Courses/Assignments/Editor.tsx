@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -24,6 +25,8 @@ export default function AssignmentEditor() {
     availableUntil: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (!isNew && assignment) {
       setFormData({
@@ -37,13 +40,29 @@ export default function AssignmentEditor() {
     }
   }, [assignment, isNew]);
 
-  const handleSave = () => {
-    if (isNew) {
-      dispatch(addAssignment({ ...formData, course: cid }));
-    } else {
-      dispatch(updateAssignment({ _id: aid, ...formData, course: cid }));
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      if (isNew) {
+        // Create new assignment
+        const newAssignment = await assignmentsClient.createAssignment(cid!, formData);
+        dispatch(addAssignment(newAssignment));
+      } else {
+        // Update existing assignment
+        const updatedAssignment = await assignmentsClient.updateAssignment({
+          _id: aid,
+          ...formData,
+          course: cid
+        });
+        dispatch(updateAssignment(updatedAssignment));
+      }
+      navigate(`/Kambaz/Courses/${cid}/Assignments`);
+    } catch (error) {
+      console.error("Error saving assignment:", error);
+      alert("Failed to save assignment. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    navigate(`/Kambaz/Courses/${cid}/Assignments`);
   };
 
   return (
@@ -79,7 +98,6 @@ export default function AssignmentEditor() {
         />
       </Form.Group>
 
-      {/* Keep all the other form fields as you had them */}
       <Form.Group as={Row} className="mb-3" controlId="wd-group">
         <Form.Label column sm={3}>Assignment Group</Form.Label>
         <Col sm={9}>
@@ -160,8 +178,12 @@ export default function AssignmentEditor() {
           Cancel
         </Button>
         {isFaculty && (
-          <Button onClick={handleSave} variant="danger">
-            Save
+          <Button 
+            onClick={handleSave} 
+            variant="danger"
+            disabled={isLoading}
+          >
+            {isLoading ? "Saving..." : "Save"}
           </Button>
         )}
       </div>

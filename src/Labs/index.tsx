@@ -23,7 +23,14 @@ export default function Labs() {
           href="https://github.com/KrystalZhang00/kambaz-react-web-app"
           target="_blank"
         >
-          GitHub Repository
+          GitHub Repository（Frontend）
+        </a>
+        <a
+          id="wd-github"
+          href="https://github.com/KrystalZhang00/kambaz-node-server-app"
+          target="_blank"
+        >
+          GitHub Repository (Backend)
         </a>
         <TOC />
         <Routes>

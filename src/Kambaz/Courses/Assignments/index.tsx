@@ -4,8 +4,9 @@ import { FaPlus } from "react-icons/fa6";
 import { BsGripVertical } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteAssignment } from "./reducer";
-import { useState } from "react";
+import { setAssignments, deleteAssignment } from "./reducer";
+import { useState, useEffect } from "react";
+import * as assignmentsClient from "./client";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -20,14 +21,36 @@ export default function Assignments() {
   
   const courseAssignments = assignments.filter((a: any) => a.course === cid);
 
+  // Fetch assignments from server
+  const fetchAssignments = async () => {
+    if (cid) {
+      try {
+        const assignments = await assignmentsClient.findAssignmentsForCourse(cid);
+        dispatch(setAssignments(assignments));
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
+
   const handleDeleteClick = (assignment: any) => {
     setAssignmentToDelete(assignment);
     setShowDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (assignmentToDelete) {
-      dispatch(deleteAssignment(assignmentToDelete._id));
+      try {
+        await assignmentsClient.deleteAssignment(assignmentToDelete._id);
+        dispatch(deleteAssignment(assignmentToDelete._id));
+      } catch (error) {
+        console.error("Error deleting assignment:", error);
+        alert("Failed to delete assignment");
+      }
     }
     setShowDeleteModal(false);
     setAssignmentToDelete(null);

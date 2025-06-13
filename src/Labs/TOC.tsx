@@ -49,8 +49,16 @@ export default function TOC() {
           target="_blank"
           rel="noreferrer"
         >
-          My GitHub
+          My Frontend GitHub
         </Nav.Link>
+        <Nav.Link
+          href="https://github.com/KrystalZhang00/kambaz-node-server-app"
+          target="_blank"
+          rel="noreferrer"
+        >
+          My Backend GitHub
+        </Nav.Link>
+        
       </Nav.Item>
     </Nav>
   );
