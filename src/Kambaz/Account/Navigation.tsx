@@ -7,6 +7,9 @@ export default function AccountNavigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
 
+  // Helper function for active class
+  const active = (type: string) => pathname.includes(type) ? "active text-danger" : "";
+
   return (
     <div className="list-group rounded-0 bg-white text-start w-100" id="wd-account-navigation">
       {/* CHANGE 3: Conditionally render links based on authentication status */}
@@ -38,6 +41,14 @@ export default function AccountNavigation() {
           }`}
         >
           Profile
+        </Link>
+      )}
+      {currentUser && currentUser.role === "ADMIN" && (
+        <Link
+          to={`/Kambaz/Account/Users`}
+          className={`list-group-item border-0 ${active("Users")}`}
+        >
+          Users
         </Link>
       )}
     </div>
