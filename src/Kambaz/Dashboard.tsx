@@ -9,12 +9,18 @@ export default function Dashboard({
   courses,
   addCourse,
   deleteCourse,
-  updateCourse
+  updateCourse,
+  enrolling,
+  setEnrolling,
+  updateEnrollment
 }: {
   courses: any[],
   addCourse: (course: any) => Promise<void>,
   deleteCourse: (courseId: string) => Promise<void>,
-  updateCourse: (course: any) => Promise<void>
+  updateCourse: (course: any) => Promise<void>,
+  enrolling: boolean,
+  setEnrolling: (enrolling: boolean) => void,
+  updateEnrollment: (courseId: string, enrolled: boolean) => Promise<void>
 }) {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -104,7 +110,12 @@ export default function Dashboard({
 
   return (
     <div className="p-4" id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1>
+      <h1 id="wd-dashboard-title">
+        Dashboard
+        <Button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary">
+          {enrolling ? "My Courses" : "All Courses"}
+        </Button>
+      </h1>
       <hr />
       
       {isFaculty && (
@@ -181,9 +192,17 @@ export default function Dashboard({
                     height={160} 
                   />
                   <Card.Body className="card-body">
-                    <Card.Title className="wd-dashboard-course-title text-nowrap overflow-hidden">
+                    <h5 className="wd-dashboard-course-title card-title">
+                      {enrolling && (
+                        <button className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} onClick={(event) => {
+                          event.preventDefault();
+                          updateEnrollment(course._id, !course.enrolled);
+                        }}>
+                          {course.enrolled ? "Unenroll" : "Enroll"}
+                        </button>
+                      )}
                       {course.name}
-                    </Card.Title>
+                    </h5>
                     <Card.Text className="wd-dashboard-course-description overflow-hidden" style={{ height: "100px" }}>
                       {course.description}
                     </Card.Text>
