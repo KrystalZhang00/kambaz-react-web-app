@@ -1,11 +1,12 @@
 import axios from "axios";
 
+const axiosWithCredentials = axios.create({ withCredentials: true });
 const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 const COURSES_API = `${REMOTE_SERVER}/api/courses`;
 const ASSIGNMENTS_API = `${REMOTE_SERVER}/api/assignments`;
 
 export const createAssignment = async (courseId: string, assignment: any) => {
-  const response = await axios.post(
+  const response = await axiosWithCredentials.post(
     `${COURSES_API}/${courseId}/assignments`,
     assignment
   );
@@ -13,17 +14,17 @@ export const createAssignment = async (courseId: string, assignment: any) => {
 };
 
 export const findAssignmentsForCourse = async (courseId: string) => {
-  const response = await axios.get(`${COURSES_API}/${courseId}/assignments`);
+  const response = await axiosWithCredentials.get(`${COURSES_API}/${courseId}/assignments`);
   return response.data;
 };
 
 export const findAssignmentById = async (assignmentId: string) => {
-  const response = await axios.get(`${ASSIGNMENTS_API}/${assignmentId}`);
+  const response = await axiosWithCredentials.get(`${ASSIGNMENTS_API}/${assignmentId}`);
   return response.data;
 };
 
 export const updateAssignment = async (assignment: any) => {
-  const response = await axios.put(
+  const response = await axiosWithCredentials.put(
     `${ASSIGNMENTS_API}/${assignment._id}`,
     assignment
   );
@@ -31,6 +32,6 @@ export const updateAssignment = async (assignment: any) => {
 };
 
 export const deleteAssignment = async (assignmentId: string) => {
-  const response = await axios.delete(`${ASSIGNMENTS_API}/${assignmentId}`);
+  const response = await axiosWithCredentials.delete(`${ASSIGNMENTS_API}/${assignmentId}`);
   return response.data;
 }; 
